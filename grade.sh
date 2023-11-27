@@ -14,3 +14,25 @@ echo 'Finished cloning'
 
 # Then, add here code to compile and run, and do any post-processing of the
 # tests
+
+cp TestListExamples.java grading-area/
+
+cd grading-area
+javac -cp $CPATH TestListExamples.java
+
+tests=`find grading-area -name "*.txt"`
+
+for file in $tests
+do
+    output=`java GradeServer < $file`
+    expected=`cat $file.expect`
+
+    if [[$output != $expected]]
+        then
+        echo "$file: Mismatched output and expected"
+        echo "Expected: $expected, got $output"
+        echo ""
+    else
+        echo "$file: Test passed"
+    fi
+done
